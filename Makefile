@@ -1,7 +1,7 @@
-all: pgm.o	hough
+all: pgm.o	houghBase
 
-hough:	hough.cu pgm.o
-	nvcc hough.cu pgm.o -o hough
+houghBase:	houghBase.cu pgm.o
+	nvcc houghBase.cu pgm.o -o houghBase
 
 pgm.o:	common/pgm.cpp
 	g++ -c common/pgm.cpp -o ./pgm.o
