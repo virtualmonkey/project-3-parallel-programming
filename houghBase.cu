@@ -53,8 +53,8 @@ void CPU_HoughTran (unsigned char *pic, int w, int h, int **acc)
 //*****************************************************************
 // TODO usar memoria constante para la tabla de senos y cosenos
 // inicializarlo en main y pasarlo al device
-//__constant__ float d_Cos[degreeBins];
-//__constant__ float d_Sin[degreeBins];
+__constant__ float d_Cos[degreeBins];
+__constant__ float d_Sin[degreeBins];
 
 //*****************************************************************
 //TODO Kernel memoria compartida
@@ -70,7 +70,7 @@ void CPU_HoughTran (unsigned char *pic, int w, int h, int **acc)
 
 // GPU kernel. One thread per image pixel is spawned.
 // The accummulator memory needs to be allocated by the host in global memory
-__global__ void GPU_HoughTran (unsigned char *pic, int w, int h, int *acc, float rMax, float rScale, float *d_Cos, float *d_Sin)
+__global__ void GPU_HoughTran (unsigned char *pic, int w, int h, int *acc, float rMax, float rScale)
 {
   //TODO calcular: int gloID = ?
   // int gloID = w * h + 1; //TODO
@@ -164,7 +164,7 @@ int main (int argc, char **argv)
   int blockNum = ceil (w * h / 256);
 
   cudaEventRecord(start);
-  GPU_HoughTran <<< blockNum, 256 >>> (d_in, w, h, d_hough, rMax, rScale, d_Cos, d_Sin);
+  GPU_HoughTran <<< blockNum, 256 >>> (d_in, w, h, d_hough, rMax, rScale);
 
   // get results from device
   cudaMemcpy (h_hough, d_hough, sizeof (int) * degreeBins * rBins, cudaMemcpyDeviceToHost);
