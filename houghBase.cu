@@ -86,7 +86,7 @@ __global__ void GPU_HoughTran (unsigned char *pic, int w, int h, int *acc, float
   int yCoord = yCent - gloID / w;
 
   //TODO eventualmente usar memoria compartida para el acumulador
-  __shared__ int localAcc [ degreeBins * rBins ] ; // each block is using a shared memory , local accummulator
+  __shared__ int localAcc [ degreeBins * rBins ] ;
 
   for ( i = locID; i < degreeBins * rBins; i += blockDim.x )
     localAcc[i] = 0;
